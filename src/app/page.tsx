@@ -1,5 +1,7 @@
 "use client";
 
+import { runAuditEngine } from "../lib/auditEngine";
+
 import { useEffect, useState } from "react";
 
 type Tool = {
@@ -60,60 +62,9 @@ export default function Home() {
   };
 
   const runAudit = () => {
-    const auditResults: AuditResult[] = [];
-
-    tools.forEach((tool) => {
-      const monthlyCost = Number(tool.cost);
-
-      if (
-        tool.name === "ChatGPT" &&
-        tool.plan === "Team"
-      ) {
-        auditResults.push({
-          tool: tool.name,
-          recommendation: "Switch to ChatGPT Plus",
-          savings: 20,
-          reason:
-            "Small teams may not fully utilize Team collaboration features.",
-        });
-      }
-
-      else if (
-        tool.name === "Cursor" &&
-        tool.plan === "Business"
-      ) {
-        auditResults.push({
-          tool: tool.name,
-          recommendation: "Downgrade to Cursor Pro",
-          savings: 20,
-          reason:
-            "Business plan may be unnecessary for smaller developer teams.",
-        });
-      }
-
-      else if (monthlyCost > 100) {
-        auditResults.push({
-          tool: tool.name,
-          recommendation: "Review enterprise usage",
-          savings: 25,
-          reason:
-            "High monthly spend suggests potential underutilized features.",
-        });
-      }
-
-      else {
-        auditResults.push({
-          tool: tool.name,
-          recommendation: "Current setup looks optimized",
-          savings: 0,
-          reason:
-            "No obvious savings opportunities found.",
-        });
-      }
-    });
-
-    setResults(auditResults);
-  };
+  const auditResults = runAuditEngine(tools);
+  setResults(auditResults);
+};
 
   const totalSavings = results.reduce(
     (sum, item) => sum + item.savings,
