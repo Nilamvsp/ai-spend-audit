@@ -163,6 +163,28 @@ export default function Home() {
 
       </div>
 
+
+
+      {results.length > 0 && (
+
+  <div className="mt-12 bg-green-500 text-black p-8 rounded-3xl text-center w-full max-w-3xl">
+
+    <h2 className="text-4xl font-bold mb-4">
+      Potential Savings
+    </h2>
+
+    <p className="text-6xl font-extrabold">
+      ${totalSavings}/month
+    </p>
+
+    <p className="text-2xl mt-4">
+      ${totalSavings * 12}/year
+    </p>
+
+  </div>
+
+)}
+
       {/* RESULTS */}
      <div className="mt-10">
   <h2 className="text-3xl font-bold mb-6">
