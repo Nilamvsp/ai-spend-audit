@@ -6,8 +6,10 @@ type Tool = {
 
 type AuditResult = {
   tool: string;
+  currentPlan: string;
   recommendation: string;
   savings: number;
+  annualSavings: number;
   reason: string;
 };
 
@@ -21,55 +23,72 @@ export function runAuditEngine(
 
     const monthlyCost = Number(tool.cost);
 
-    // ChatGPT logic
+    // ChatGPT Team → Plus
     if (
       tool.name === "ChatGPT" &&
       tool.plan === "Team"
     ) {
+
+      const savings = monthlyCost - 20;
+
       results.push({
         tool: tool.name,
+        currentPlan: tool.plan,
         recommendation: "Switch to ChatGPT Plus",
-        savings: 20,
+        savings,
+        annualSavings: savings * 12,
         reason:
-          "Small teams may not fully utilize Team collaboration features.",
+          "For smaller teams, ChatGPT Team collaboration features are often underutilized.",
       });
     }
 
-    // Cursor logic
+    // Cursor Business → Pro
     else if (
       tool.name === "Cursor" &&
       tool.plan === "Business"
     ) {
+
+      const savings = monthlyCost - 20;
+
       results.push({
         tool: tool.name,
+        currentPlan: tool.plan,
         recommendation: "Downgrade to Cursor Pro",
-        savings: 20,
+        savings,
+        annualSavings: savings * 12,
         reason:
-          "Business features may be unnecessary for smaller teams.",
+          "Cursor Business is best suited for larger engineering organizations.",
       });
     }
 
-    // Generic logic
+    // High spend warning
     else if (monthlyCost > 100) {
+
       results.push({
         tool: tool.name,
+        currentPlan: tool.plan,
         recommendation: "Review enterprise usage",
         savings: 25,
+        annualSavings: 300,
         reason:
-          "High spend may indicate underutilized premium features.",
+          "High monthly AI spend may indicate unused enterprise features or overprovisioned seats.",
       });
     }
 
-    // No savings
+    // Already optimized
     else {
+
       results.push({
         tool: tool.name,
+        currentPlan: tool.plan,
         recommendation: "Current setup looks optimized",
         savings: 0,
+        annualSavings: 0,
         reason:
-          "No obvious savings opportunities found.",
+          "No meaningful savings opportunities detected for current usage.",
       });
     }
+
   });
 
   return results;

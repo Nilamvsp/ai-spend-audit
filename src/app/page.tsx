@@ -164,48 +164,56 @@ export default function Home() {
       </div>
 
       {/* RESULTS */}
-      {results.length > 0 && (
-        <div className="mt-12 w-full max-w-2xl">
+     <div className="mt-10">
+  <h2 className="text-3xl font-bold mb-6">
+    Audit Results
+  </h2>
 
-          <div className="bg-green-900 p-6 rounded-2xl mb-8">
-            <h2 className="text-4xl font-bold">
-              Save ${totalSavings}/month
-            </h2>
+  {results.map((result, index) => (
 
-            <p className="mt-2 text-green-200">
-              Estimated annual savings: ${totalSavings * 12}
-            </p>
-          </div>
+    <div
+      key={index}
+      className="bg-gray-900 border border-gray-700 rounded-2xl p-6 mb-6"
+    >
 
-          <div className="space-y-5">
-            {results.map((result, index) => (
-              <div
-                key={index}
-                className="bg-gray-900 border border-gray-700 p-5 rounded-2xl"
-              >
-                <h3 className="text-2xl font-semibold">
-                  {result.tool}
-                </h3>
+      <div className="flex justify-between items-center mb-4">
+        <h3 className="text-2xl font-semibold">
+          {result.tool}
+        </h3>
 
-                <p className="mt-3">
-                  <b>Recommendation:</b>{" "}
-                  {result.recommendation}
-                </p>
+        <div className="text-right">
+          <p className="text-green-400 text-xl font-bold">
+            Save ${result.savings}/mo
+          </p>
 
-                <p className="mt-2">
-                  <b>Savings:</b> ${result.savings}/month
-                </p>
-
-                <p className="mt-3 text-gray-400">
-                  {result.reason}
-                </p>
-              </div>
-            ))}
-          </div>
-
+          <p className="text-gray-400">
+            ${result.annualSavings}/year
+          </p>
         </div>
-      )}
+      </div>
 
+      <p className="mb-2">
+        <span className="font-semibold">
+          Current Plan:
+        </span>{" "}
+        {result.currentPlan}
+      </p>
+
+      <p className="mb-2">
+        <span className="font-semibold">
+          Recommendation:
+        </span>{" "}
+        {result.recommendation}
+      </p>
+
+      <p className="text-gray-400">
+        {result.reason}
+      </p>
+
+    </div>
+
+  ))}
+</div>
     </main>
   );
 }
