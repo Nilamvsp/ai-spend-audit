@@ -8,6 +8,8 @@ type Tool = {
   name: string;
   plan: string;
   cost: string;
+  teamSize: string;
+  useCase: string;
 };
 
 type AuditResult = {
@@ -25,13 +27,15 @@ const toolPlans: Record<string, string[]> = {
   Copilot: ["Individual", "Business"],
 };
 
-export default function Home() {
+export default function () {
   const [tools, setTools] = useState<Tool[]>([]);
   const [results, setResults] = useState<AuditResult[]>([]);
 
   const [name, setName] = useState("ChatGPT");
   const [plan, setPlan] = useState("Plus");
   const [cost, setCost] = useState("");
+  const [teamSize, setTeamSize] = useState("");
+  const [useCase, setUseCase] = useState("Coding");
 
   // LOAD FROM LOCAL STORAGE
   useEffect(() => {
@@ -54,6 +58,8 @@ export default function Home() {
       name,
       plan,
       cost,
+      teamSize,
+      useCase,
     };
 
     setTools([...tools, newTool]);
@@ -100,6 +106,7 @@ export default function Home() {
           ))}
         </select>
 
+
         {/* PLAN SELECT */}
         <select
           value={plan}
@@ -119,6 +126,26 @@ export default function Home() {
           onChange={(e) => setCost(e.target.value)}
           className="w-full p-3 rounded bg-gray-900 border border-gray-700"
         />
+
+        <input
+          type="number"
+          placeholder="Team size"
+          value={teamSize}
+          onChange={(e) => setTeamSize(e.target.value)}
+          className="w-full p-3 rounded bg-gray-900 border border-gray-700"
+        />
+
+        <select
+          value={useCase}
+          onChange={(e) => setUseCase(e.target.value)}
+          className="w-full p-3 rounded bg-gray-900 border border-gray-700"
+        >
+          <option>Coding</option>
+          <option>Writing</option>
+          <option>Research</option>
+          <option>Data Analysis</option>
+          <option>Mixed</option>
+        </select>
 
         {/* BUTTONS */}
         <button
@@ -146,17 +173,17 @@ export default function Home() {
 
         {tools.length > 0 && (
 
-  <button
-    onClick={() => {
-      setTools([]);
-      localStorage.removeItem("tools");
-    }}
-    className="mb-4 bg-gray-800 px-4 py-2 rounded-lg hover:bg-gray-700"
-  >
-    Clear Stack
-  </button>
+          <button
+            onClick={() => {
+              setTools([]);
+              localStorage.removeItem("tools");
+            }}
+            className="mb-4 bg-gray-800 px-4 py-2 rounded-lg hover:bg-gray-700"
+          >
+            Clear Stack
+          </button>
 
-)}
+        )}
 
         {tools.length === 0 ? (
           <p className="text-gray-500">
@@ -171,6 +198,8 @@ export default function Home() {
               <p><b>Tool:</b> {tool.name}</p>
               <p><b>Plan:</b> {tool.plan}</p>
               <p><b>Spend:</b> ${tool.cost}/month</p>
+              <p><b>Team Size:</b> {tool.teamSize}</p>
+              <p><b>Use Case:</b> {tool.useCase}</p>
               <button
                 onClick={() => {
                   const updatedTools = tools.filter(
