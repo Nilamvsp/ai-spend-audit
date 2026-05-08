@@ -2,6 +2,8 @@ type Tool = {
   name: string;
   plan: string;
   cost: string;
+  teamSize: string;
+  useCase: string;
 };
 
 type AuditResult = {
@@ -23,71 +25,85 @@ export function runAuditEngine(
 
     const monthlyCost = Number(tool.cost);
 
+    let savings = 0;
+
+    let recommendation =
+      "Current setup looks optimized";
+
+    let reason =
+      "No meaningful savings opportunities detected for current usage.";
+
     // ChatGPT Team → Plus
     if (
       tool.name === "ChatGPT" &&
-      tool.plan === "Team"
+      tool.plan === "Team" &&
+      Number(tool.teamSize) <= 2
     ) {
 
-      const savings = monthlyCost - 20;
+      savings = monthlyCost - 20;
 
-      results.push({
-        tool: tool.name,
-        currentPlan: tool.plan,
-        recommendation: "Switch to ChatGPT Plus",
-        savings,
-        annualSavings: savings * 12,
-        reason:
-          "For smaller teams, ChatGPT Team collaboration features are often underutilized.",
-      });
+      recommendation =
+        "Switch to ChatGPT Plus";
+
+      reason =
+        "Small teams often don't fully utilize Team-tier collaboration features.";
+
     }
 
     // Cursor Business → Pro
     else if (
       tool.name === "Cursor" &&
-      tool.plan === "Business"
+      tool.plan === "Business" &&
+      Number(tool.teamSize) <= 3
     ) {
 
-      const savings = monthlyCost - 20;
+      savings = monthlyCost - 20;
 
-      results.push({
-        tool: tool.name,
-        currentPlan: tool.plan,
-        recommendation: "Downgrade to Cursor Pro",
-        savings,
-        annualSavings: savings * 12,
-        reason:
-          "Cursor Business is best suited for larger engineering organizations.",
-      });
+      recommendation =
+        "Downgrade to Cursor Pro";
+
+      reason =
+        "Cursor Business is usually excessive for very small engineering teams.";
+
     }
 
-    // High spend warning
+    // Claude writing workflow
+    else if (
+      tool.useCase === "Writing" &&
+      tool.name === "Claude"
+    ) {
+
+      savings = Math.round(monthlyCost * 0.25);
+
+      recommendation =
+        "Consider ChatGPT Plus";
+
+      reason =
+        "For general writing workflows, ChatGPT Plus may provide similar output quality at lower cost.";
+
+    }
+
+    // High spend detection
     else if (monthlyCost > 100) {
 
-      results.push({
-        tool: tool.name,
-        currentPlan: tool.plan,
-        recommendation: "Review enterprise usage",
-        savings: 25,
-        annualSavings: 300,
-        reason:
-          "High monthly AI spend may indicate unused enterprise features or overprovisioned seats.",
-      });
+      savings = Math.round(monthlyCost * 0.30);
+
+      recommendation =
+        "Review enterprise-level subscriptions";
+
+      reason =
+        "Your spend appears high relative to typical startup AI usage benchmarks.";
+
     }
 
-    // Already optimized
-    else {
-
-      results.push({
-        tool: tool.name,
-        currentPlan: tool.plan,
-        recommendation: "Current setup looks optimized",
-        savings: 0,
-        annualSavings: 0,
-        reason:
-          "No meaningful savings opportunities detected for current usage.",
-      });
-    }
+    results.push({
+      tool: tool.name,
+      currentPlan: tool.plan,
+      recommendation,
+      savings,
+      annualSavings: savings * 12,
+      reason,
+    });
 
   });
 

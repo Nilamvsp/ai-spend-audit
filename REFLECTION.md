@@ -1,0 +1,1 @@
+I used ChatGPT heavily for debugging, architectural guidance, and learning unfamiliar technologies like Next.js and TypeScript. I still handled implementation, testing, iteration, and debugging manually. AI accelerated my learning and helped me move faster, but I verified outputs and adjusted logic based on the product requirements.
