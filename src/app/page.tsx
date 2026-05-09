@@ -158,7 +158,7 @@ export default function () {
 
   const generateShareableAudit = async () => {
 
-  const auditId = uuidv4();
+  const auditId = uuidv4(); // ✅ ONE SOURCE OF TRUTH
 
   const totalSavings = results.reduce(
     (sum, r) => sum + r.savings,
@@ -167,13 +167,14 @@ export default function () {
 
   const { error } = await supabase.from("audits").insert([
     {
-      id: uuidv4(),
+      id: auditId,   // ✅ same ID used everywhere
       tools,
       results,
       summary,
       total_savings: totalSavings,
     },
   ]);
+
 
   if (error) {
     alert("Failed to create share link");
@@ -186,7 +187,6 @@ export default function () {
   alert("Shareable link created!");
 
   console.log("Share URL:", shareUrl);
-
 };
 
   return (
