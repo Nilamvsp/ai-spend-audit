@@ -5,62 +5,85 @@ import { supabase } from "@/src/lib/supabaseClient";
 
 export default function Page({ params }: { params: Promise<{ id: string }> }) {
 
-  const { id } = use(params);
+    const { id } = use(params);
+    const [audit, setAudit] = useState<any>(null);
 
-  const [audit, setAudit] = useState<any>(null);
+    useEffect(() => {
+        async function fetchAudit() {
 
-  useEffect(() => {
+            const { data, error } = await supabase
+                .from("audits")
+                .select("*")
+                .eq("id", id)
+                .single();
 
-    async function fetchAudit() {
+            if (error) {
+                console.error(error);
+                return;
+            }
 
-      const { data, error } = await supabase
-        .from("audits")
-        .select("*")
-        .eq("id", id)
-        .single();
+            setAudit(data);
+        }
 
-      if (error) {
-        console.error(error);
-        return;
-      }
+        fetchAudit();
+    }, []);
 
-      setAudit(data);
+    if (!audit) {
+        return (
+            <div className="p-10 text-white">
+                Loading audit...
+            </div>
+        );
     }
 
-    fetchAudit();
+    return (
+        <div className="p-10 text-white max-w-4xl mx-auto">
 
-  }, []);
+  {/* HEADER */}
+  <h1 className="text-6xl text-black font-extrabold tracking-tight mb-8">
+    AI Spend Audit Report
+  </h1>
 
-  if (!audit) {
-    return <div className="p-10 text-white">Loading audit...</div>;
-  }
+            {/* SAVINGS CARD */}
+            <div className="mb-8 bg-green-900/20 border border-green-500 p-6 rounded-xl">
+                <h2 className="text-xl font-bold text-green-400">
+                    Total Savings
+                </h2>
+                <p className="text-3xl font-bold">
+                    ${audit.total_savings}/month
+                </p>
+            </div>
 
-  return (
-    <div className="p-10 text-white">
+            {/* SUMMARY SECTION */}
+            <div className="mb-8 bg-gray-900 border border-gray-700 p-6 rounded-xl">
+                <h2 className="text-2xl font-bold mb-2">
+                    Audit Summary
+                </h2>
+                <p className="text-gray-300">
+                    {audit.summary || "No summary available"}
+                </p>
+            </div>
 
-      <h1 className="text-3xl font-bold mb-6">
-        AI Spend Audit Report
-      </h1>
+            {/* TOOLS SECTION */}
+            <h2 className="text-2xl font-bold mb-4">
+                Tools Breakdown
+            </h2>
 
-      <h2 className="text-xl mb-4">
-        Total Savings: ${audit.total_savings}
-      </h2>
+            <div className="space-y-4">
+                {audit.tools?.map((tool: any, index: number) => (
+                    <div
+                        key={index}
+                        className="bg-gray-900 border border-gray-700 p-4 rounded-xl"
+                    >
+                        <p><b>Tool:</b> {tool.name}</p>
+                        <p><b>Plan:</b> {tool.plan}</p>
+                        <p><b>Cost:</b> ${tool.cost}/month</p>
+                        <p><b>Team Size:</b> {tool.teamSize}</p>
+                        <p><b>Use Case:</b> {tool.useCase}</p>
+                    </div>
+                ))}
+            </div>
 
-     <div className="space-y-4">
-  {audit.tools.map((tool: any, index: number) => (
-    <div
-      key={index}
-      className="bg-gray-900 border border-gray-700 p-4 rounded-xl"
-    >
-      <p><b>Tool:</b> {tool.name}</p>
-      <p><b>Plan:</b> {tool.plan}</p>
-      <p><b>Cost:</b> ${tool.cost}/month</p>
-      <p><b>Team Size:</b> {tool.teamSize}</p>
-      <p><b>Use Case:</b> {tool.useCase}</p>
-    </div>
-  ))}
-</div>
-
-    </div>
-  );
+        </div>
+    );
 }
