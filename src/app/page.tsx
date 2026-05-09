@@ -30,6 +30,7 @@ const toolPlans: Record<string, string[]> = {
 export default function () {
   const [tools, setTools] = useState<Tool[]>([]);
   const [results, setResults] = useState<AuditResult[]>([]);
+  const [summary, setSummary] = useState("");
 
   const [name, setName] = useState("ChatGPT");
   const [plan, setPlan] = useState("Plus");
@@ -45,6 +46,7 @@ export default function () {
       setTools(JSON.parse(savedTools));
     }
   }, []);
+
 
   // SAVE TO LOCAL STORAGE
   useEffect(() => {
@@ -68,8 +70,48 @@ export default function () {
   };
 
   const runAudit = () => {
+
     const auditResults = runAuditEngine(tools);
+
     setResults(auditResults);
+
+    const totalSavings = auditResults.reduce(
+      (sum, item) => sum + item.savings,
+      0
+    );
+
+    let generatedSummary = "";
+
+    if (totalSavings > 500) {
+
+      generatedSummary =
+        "Your AI stack appears significantly overprovisioned. Optimizing your subscriptions could unlock major annual savings while maintaining similar productivity for your team.";
+
+    }
+
+    else if (totalSavings > 100) {
+
+      generatedSummary =
+        "Your current AI tooling has a few optimization opportunities. Small plan adjustments could reduce costs without affecting workflow quality.";
+
+    }
+
+    else if (totalSavings > 0) {
+
+      generatedSummary =
+        "Your stack is already fairly optimized, but there are still a few smaller opportunities to reduce unnecessary AI spend.";
+
+    }
+
+    else {
+
+      generatedSummary =
+        "Your current AI stack appears well optimized for your current team size and use case.";
+
+    }
+
+    setSummary(generatedSummary);
+
   };
 
   const totalSavings = results.reduce(
@@ -246,6 +288,22 @@ export default function () {
           Audit Results
         </h2>
 
+        {summary && (
+
+          <div className="mt-10 w-full max-w-3xl bg-gray-900 border border-gray-700 rounded-2xl p-6">
+
+            <h2 className="text-2xl font-bold mb-4">
+              AI Summary
+            </h2>
+
+            <p className="text-gray-300 leading-7">
+              {summary}
+            </p>
+
+          </div>
+
+        )}
+
         {results.map((result, index) => (
 
           <div
@@ -291,6 +349,8 @@ export default function () {
 
         ))}
       </div>
+
+     
     </main>
   );
 }
