@@ -4,6 +4,8 @@ import { runAuditEngine } from "../lib/auditEngine";
 
 import { useEffect, useState } from "react";
 import { supabase } from "../lib/supabaseClient";
+import { v4 as uuidv4 } from "uuid";
+
 
 
 type Tool = {
@@ -45,13 +47,6 @@ export default function () {
   const [useCase, setUseCase] = useState("Coding");
 
   // LOAD FROM LOCAL STORAGE
-  // useEffect(() => {
-  //   const savedTools = localStorage.getItem("tools");
-
-  //   if (savedTools) {
-  //     setTools(JSON.parse(savedTools));
-  //   }
-  // }, []);
 
   useEffect(() => {
     async function testConnection() {
@@ -92,24 +87,24 @@ export default function () {
 
   const saveLead = async () => {
 
-  const { data, error } = await supabase.from("leads").insert([
-    {
-      email,
-      company,
-      role,
-      tools: tools,
-      total_savings: results.reduce((sum, r) => sum + r.savings, 0),
-    },
-  ]);
+    const { data, error } = await supabase.from("leads").insert([
+      {
+        email,
+        company,
+        role,
+        tools: tools,
+        total_savings: results.reduce((sum, r) => sum + r.savings, 0),
+      },
+    ]);
 
-  if (error) {
-    console.error("Insert error:", error.message);
-    alert("Failed to save lead");
-  } else {
-    alert("Lead saved successfully!");
-    console.log("Saved:", data);
-  }
-};
+    if (error) {
+      console.error("Insert error:", error.message);
+      alert("Failed to save lead");
+    } else {
+      alert("Lead saved successfully!");
+      console.log("Saved:", data);
+    }
+  };
 
   const runAudit = () => {
 
@@ -160,6 +155,39 @@ export default function () {
     (sum, item) => sum + item.savings,
     0
   );
+
+  const generateShareableAudit = async () => {
+
+  const auditId = uuidv4();
+
+  const totalSavings = results.reduce(
+    (sum, r) => sum + r.savings,
+    0
+  );
+
+  const { error } = await supabase.from("audits").insert([
+    {
+      id: uuidv4(),
+      tools,
+      results,
+      summary,
+      total_savings: totalSavings,
+    },
+  ]);
+
+  if (error) {
+    alert("Failed to create share link");
+    console.error(error);
+    return;
+  }
+
+  const shareUrl = `${window.location.origin}/audit/${auditId}`;
+
+  alert("Shareable link created!");
+
+  console.log("Share URL:", shareUrl);
+
+};
 
   return (
     <main className="min-h-screen bg-black text-white p-6 flex flex-col items-center">
@@ -439,6 +467,13 @@ export default function () {
 
         ))}
       </div>
+
+      <button
+        onClick={generateShareableAudit}
+        className="w-full mt-4 bg-blue-500 text-white py-3 rounded-xl font-semibold hover:bg-blue-400"
+      >
+        Generate Shareable Link
+      </button>
 
 
     </main>
