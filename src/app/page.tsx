@@ -3,6 +3,8 @@
 import { runAuditEngine } from "../lib/auditEngine";
 
 import { useEffect, useState } from "react";
+import { supabase } from "../lib/supabaseClient";
+
 
 type Tool = {
   name: string;
@@ -27,6 +29,7 @@ const toolPlans: Record<string, string[]> = {
   Copilot: ["Individual", "Business"],
 };
 
+
 export default function () {
   const [tools, setTools] = useState<Tool[]>([]);
   const [results, setResults] = useState<AuditResult[]>([]);
@@ -42,12 +45,26 @@ export default function () {
   const [useCase, setUseCase] = useState("Coding");
 
   // LOAD FROM LOCAL STORAGE
-  useEffect(() => {
-    const savedTools = localStorage.getItem("tools");
+  // useEffect(() => {
+  //   const savedTools = localStorage.getItem("tools");
 
-    if (savedTools) {
-      setTools(JSON.parse(savedTools));
+  //   if (savedTools) {
+  //     setTools(JSON.parse(savedTools));
+  //   }
+  // }, []);
+
+  useEffect(() => {
+    async function testConnection() {
+      const { data, error } = await supabase
+        .from("leads")
+        .select("*")
+        .limit(1);
+
+      console.log("Supabase test data:", data);
+      console.log("Supabase test error:", error);
     }
+
+    testConnection();
   }, []);
 
 
@@ -71,6 +88,28 @@ export default function () {
 
     setCost("");
   };
+
+
+  const saveLead = async () => {
+
+  const { data, error } = await supabase.from("leads").insert([
+    {
+      email,
+      company,
+      role,
+      tools: tools,
+      total_savings: results.reduce((sum, r) => sum + r.savings, 0),
+    },
+  ]);
+
+  if (error) {
+    console.error("Insert error:", error.message);
+    alert("Failed to save lead");
+  } else {
+    alert("Lead saved successfully!");
+    console.log("Saved:", data);
+  }
+};
 
   const runAudit = () => {
 
@@ -124,6 +163,8 @@ export default function () {
 
   return (
     <main className="min-h-screen bg-black text-white p-6 flex flex-col items-center">
+
+      useEffect
 
       <h1 className="text-5xl font-bold mt-10 text-center">
         AI Spend Audit
@@ -336,11 +377,11 @@ export default function () {
                 />
 
                 <button
+                  onClick={saveLead}
                   className="w-full bg-white text-black py-3 rounded-xl font-semibold hover:bg-gray-200"
                 >
                   Save My Audit
                 </button>
-
               </div>
 
             </div>
