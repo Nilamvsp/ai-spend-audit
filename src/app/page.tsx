@@ -31,6 +31,9 @@ export default function () {
   const [tools, setTools] = useState<Tool[]>([]);
   const [results, setResults] = useState<AuditResult[]>([]);
   const [summary, setSummary] = useState("");
+  const [email, setEmail] = useState("");
+  const [company, setCompany] = useState("");
+  const [role, setRole] = useState("");
 
   const [name, setName] = useState("ChatGPT");
   const [plan, setPlan] = useState("Plus");
@@ -296,6 +299,52 @@ export default function () {
               AI Summary
             </h2>
 
+            <div className="mt-10 w-full max-w-3xl bg-gray-900 border border-gray-700 rounded-2xl p-6">
+
+              <h2 className="text-2xl font-bold mb-4">
+                Get Full Audit Report
+              </h2>
+
+              <p className="text-gray-400 mb-6">
+                Receive your audit summary and future AI savings recommendations.
+              </p>
+
+              <div className="space-y-4">
+
+                <input
+                  type="email"
+                  placeholder="Email address"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="w-full p-3 rounded bg-gray-800 border border-gray-700"
+                />
+
+                <input
+                  type="text"
+                  placeholder="Company name (optional)"
+                  value={company}
+                  onChange={(e) => setCompany(e.target.value)}
+                  className="w-full p-3 rounded bg-gray-800 border border-gray-700"
+                />
+
+                <input
+                  type="text"
+                  placeholder="Role (optional)"
+                  value={role}
+                  onChange={(e) => setRole(e.target.value)}
+                  className="w-full p-3 rounded bg-gray-800 border border-gray-700"
+                />
+
+                <button
+                  className="w-full bg-white text-black py-3 rounded-xl font-semibold hover:bg-gray-200"
+                >
+                  Save My Audit
+                </button>
+
+              </div>
+
+            </div>
+
             <p className="text-gray-300 leading-7">
               {summary}
             </p>
@@ -350,7 +399,7 @@ export default function () {
         ))}
       </div>
 
-     
+
     </main>
   );
 }
