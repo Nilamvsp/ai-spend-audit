@@ -159,7 +159,7 @@ export default function HomePage() {
     0
   );
 
-  
+
 
   const generateShareableAudit = async () => {
     const { data, error } = await supabase
@@ -192,8 +192,6 @@ export default function HomePage() {
 
   return (
     <main className="min-h-screen bg-black text-white p-6 flex flex-col items-center">
-
-      useEffect
 
       <h1 className="text-5xl font-bold mt-10 text-center">
         AI Spend Audit
@@ -365,9 +363,7 @@ export default function HomePage() {
 
           <div className="mt-10 w-full max-w-3xl bg-gray-900 border border-gray-700 rounded-2xl p-6">
 
-            <h2 className="text-2xl font-bold mb-4">
-              AI Summary
-            </h2>
+
 
             <div className="mt-10 w-full max-w-3xl bg-gray-900 border border-gray-700 rounded-2xl p-6">
 
@@ -414,12 +410,20 @@ export default function HomePage() {
               </div>
 
             </div>
+             <div>
+              <h2 className="text-2xl font-bold mb-4 mt-2">
+              AI Summary
+            </h2>
 
             <p className="text-gray-300 leading-7">
               {summary}
             </p>
+             </div>
 
+
+           
           </div>
+          
 
         )}
 
@@ -427,10 +431,10 @@ export default function HomePage() {
 
           <div
             key={index}
-            className="bg-gray-900 border border-gray-700 rounded-2xl p-6 mb-6"
+            className="bg-gray-900 border border-gray-700 rounded-2xl p-6 mt-3 mb-6"
           >
 
-            <div className="flex justify-between items-center mb-4">
+            <div className="flex justify-between items-center mb-4 mt-3">
               <h3 className="text-2xl font-semibold">
                 {result.tool}
               </h3>

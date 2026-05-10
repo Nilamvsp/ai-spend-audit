@@ -192,7 +192,7 @@ export default function AuditPage({
         <div className="bg-gray-900 border border-gray-700 p-6 rounded-2xl mb-10">
 
           <h2 className="text-3xl font-bold mb-4">
-            Summary
+           AI Summary
           </h2>
 
           <p className="text-gray-300 leading-8">
