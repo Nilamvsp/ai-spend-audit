@@ -6,8 +6,7 @@ export async function POST(req: Request) {
     const audit = await req.json();
 
     const pdf = await generatePDF(audit);
-
-    return new NextResponse(pdf, {
+return new NextResponse(Buffer.from(pdf), {
       headers: {
         "Content-Type": "application/pdf",
         "Content-Disposition": "attachment; filename=audit.pdf",
