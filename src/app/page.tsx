@@ -197,12 +197,12 @@ export default function HomePage() {
         AI Spend Audit
       </h1>
 
-      <p className="text-gray-400 mt-4 text-center max-w-2xl">
+      <p className="text-gray-400 mt-4  text-center max-w-2xl">
         Discover hidden AI subscription waste and optimize your team’s stack.
       </p>
 
       {/* FORM */}
-      <div className="mt-10 w-full max-w-md space-y-4 bg-gray-950 p-6 rounded-2xl border border-gray-800">
+      <div className="mt-10 w-full max-w-md space-y-4 bg-slate-700 bg-gray-950 p-6 rounded-2xl border border-gray-800">
 
         {/* TOOL SELECT */}
         <select
@@ -334,8 +334,13 @@ export default function HomePage() {
 
 
       {results.length > 0 && (
+        
 
         <div className="mt-12 bg-green-500 text-black p-8 rounded-3xl text-center w-full max-w-3xl">
+           <h2 className="text-3xl font-bold mb-6 text-white">
+          Audit Results
+        </h2>
+
 
           <h2 className="text-4xl font-bold mb-4">
             Potential Savings
@@ -355,10 +360,7 @@ export default function HomePage() {
 
       {/* RESULTS */}
       <div className="mt-10">
-        <h2 className="text-3xl font-bold mb-6">
-          Audit Results
-        </h2>
-
+       
         {summary && (
 
           <div className="mt-10 w-full max-w-3xl bg-gray-900 border border-gray-700 rounded-2xl p-6">
