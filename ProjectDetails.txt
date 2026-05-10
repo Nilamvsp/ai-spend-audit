@@ -1,0 +1,36 @@
+
+What Does Credex Do?
+Credex sells:
+discounted AI infrastructure credits
+Meaning:
+companies sometimes buy too many AI credits
+later they don't need them
+Credex helps resell/reallocate those credits cheaper
+So:
+Credex saves companies money
+*********************************************************
+So Your App Has TWO Goals
+Goal	Why
+Help user save money	builds trust
+Generate leads for Credex	business objective
+Both are equally important
+*********************************************************
+Your project is : 
+A free SaaS tool that helps startups identify unnecessary AI spending while generating leads for Credex.
+*********************************************************
+
+Step for peoject :
+1.npx create-next-app@latest 
+2.What is your project named? ... ai-spend-audit
+3.cd ai-spend-audit
+4.npm run dev
+5.http://localhost:3000
+
+nside project you’ll mainly use:
+6.src/app/page.tsx
+
+This is your homepage.
+And:
+
+src/app/globals.css
+Global styles.
