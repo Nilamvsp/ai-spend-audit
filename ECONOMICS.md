@@ -1,156 +1,81 @@
 # ECONOMICS.md
 
-# Unit Economics
+# Simple Economics of the Product
 
-## What could a converted lead be worth?
+## What a customer is worth
 
-I don’t know the exact pricing model used by Credex, so I made rough assumptions based on startup AI spending.
+I am not using exact official pricing of Credex, so this is just a rough idea based on startup AI spending.
 
-If a startup is spending around:
+Most startups using AI tools like ChatGPT, Cursor, Copilot etc. usually spend:
 
-* $500–$3000/month on AI tools
-* and Credex helps reduce those costs using discounted infrastructure credits
+* ₹40,000 to ₹2,50,000 per month on AI tools (approx $500–$3000)
 
-then even a single converted customer could become valuable over time.
+If Credex helps them reduce this cost using better plans or discounted credits, then even a small improvement becomes valuable.
 
-For example:
+So one customer could roughly be worth:
 
-If Credex earns even:
+* ₹1,00,000 to ₹3,00,000 per year (lifetime value estimate)
 
-* $100–$300 profit monthly from one active customer
-* and the customer stays for around 12 months
-
-then one converted customer could be worth roughly:
-
-$1200–$3600 lifetime value.
-
-This is only an estimate, but it shows why lead generation through audits can be valuable.
+This is not exact, but it shows that even a single saved customer is important.
 
 ---
 
-# Customer Acquisition Cost (CAC)
+## How we get users (cost side)
 
-Since this project is mostly content-driven and shareable, I think early CAC can stay low.
+This tool mainly gets users from:
 
-## Reddit / Twitter
+* Reddit posts
+* Twitter / X posts
+* Product Hunt launch
+* direct sharing of audit links
 
-Main cost:
+So in the beginning:
 
-* time
-* creating useful posts
-* interacting with founders
-
-Estimated CAC:
-
-* almost free initially
+* Cost of getting users = almost ₹0
+* Main cost = time and effort
 
 ---
 
-## Product Hunt
+## Simple funnel
 
-If the launch performs well:
-
-* many users can come organically
-* users may share reports
-
-Estimated CAC:
-
-* very low
-
----
-
-## SEO / Blogs
-
-Writing comparison blogs like:
-
-* “Cursor vs Copilot”
-* “Best AI tools for startups”
-* “How startups overspend on AI tools”
-
-could slowly bring organic traffic.
-
-This takes longer but can reduce CAC over time.
-
----
-
-# Conversion Funnel
-
-A rough funnel could look like this:
+A basic flow can look like this:
 
 1000 visitors
-→ 250 completed audits
-→ 70 email captures
-→ 10 consultation requests
-→ 2 paying customers
+→ 200–300 audits completed
+→ 60–80 emails collected
+→ 5–10 serious leads
+→ 1–2 conversions
 
-Even with small conversion rates, the economics can still work if customer value is high enough.
-
----
-
-# What conversion rates make this profitable?
-
-If:
-
-* one converted customer is worth around $2000 lifetime
-* and customer acquisition stays mostly organic
-
-then even:
-
-* 1–2% conversion from audit to customer
-
-could still make the product profitable.
-
-The important part is generating:
-
-* high-quality leads
-* companies already spending heavily on AI
-
-instead of only focusing on large traffic numbers.
+Even small conversion is fine if each customer has good value.
 
 ---
 
-# What would need to happen for $1M ARR?
+## When does this become a good business?
 
-This is rough estimation.
+This makes sense if:
 
-If Credex makes around:
+* users are already spending money on AI tools
+* audit helps them see real savings
+* Credex can offer better pricing or credits
 
-* $200/month profit per active customer
+If average customer value is around:
 
-then to reach:
+* ₹1,50,000 lifetime
 
-* $1M ARR
-
-they would need roughly:
-
-400–450 active customers.
-
-To reach that level, the product would probably need:
-
-* strong SEO traffic
-* consistent founder communities
-* viral sharing of reports
-* partnerships with startup communities
-* good consultation conversion rates
-
-The biggest advantage is that AI spending is increasing quickly, so demand for optimization tools may also increase.
+then even a small number of customers can make it meaningful.
 
 ---
 
-# Final Thoughts
+## Final thought
 
-I think the most important thing for this product is trust.
+The idea is simple:
 
-If users believe:
+People are already spending money on AI tools, but they don’t really track or optimize it.
 
-* the audit logic is honest
-* recommendations are realistic
-* savings are not exaggerated
+This product just helps them:
 
-then they are more likely to:
+* see where money is going
+* find possible savings
+* make better decisions
 
-* share the report
-* give their email
-* book consultations
-
-That trust is probably more important than aggressive marketing.
+If that works, then Credex also gets good quality leads from it.
