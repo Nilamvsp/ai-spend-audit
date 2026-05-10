@@ -1,89 +1,193 @@
 "use client";
 
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { supabase } from "@/src/lib/supabaseClient";
+import { useParams } from "next/navigation";
 
-export default function Page({ params }: { params: Promise<{ id: string }> }) {
+export default function Page() {
+  const params = useParams();
+  const id = params?.id as string;
 
-    const { id } = use(params);
-    const [audit, setAudit] = useState<any>(null);
+  const [audit, setAudit] = useState<any>(null);
+  const [sending, setSending] = useState(false);
 
-    useEffect(() => {
-        async function fetchAudit() {
+  useEffect(() => {
+    if (!id) return;
 
-            const { data, error } = await supabase
-                .from("audits")
-                .select("*")
-                .eq("id", id)
-                .single();
+    const fetchAudit = async () => {
+      const { data, error } = await supabase
+        .from("audits")
+        .select("*")
+        .eq("id", id)
+        .single();
 
-            if (error) {
-                console.error(error);
-                return;
-            }
+      if (error) {
+        console.error(error);
+        return;
+      }
 
-            setAudit(data);
-        }
+      setAudit(data);
+    };
 
-        fetchAudit();
-    }, []);
+    fetchAudit();
+  }, [id]);
 
-    if (!audit) {
-        return (
-            <div className="p-10 text-white">
-                Loading audit...
-            </div>
-        );
+  // DOWNLOAD PDF
+  const downloadPDF = async () => {
+    const res = await fetch("/api/pdf", {
+      method: "POST",
+      body: JSON.stringify(audit),
+    });
+
+    const blob = await res.blob();
+
+    const url = window.URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "audit-report.pdf";
+    a.click();
+  };
+
+  // SEND EMAIL
+  const sendEmail = async () => {
+    const email = prompt("Enter your email");
+
+    if (!email) return;
+
+    try {
+      setSending(true);
+
+      const res = await fetch("/api/email", {
+        method: "POST",
+        body: JSON.stringify({
+          email,
+          audit,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (data.success) {
+        alert("Email sent successfully!");
+      } else {
+        alert("Email failed");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Something went wrong");
+    } finally {
+      setSending(false);
     }
+  };
 
+  if (!audit) {
     return (
-        <div className="p-10 text-white max-w-4xl mx-auto">
+      <div className="min-h-screen bg-black text-white flex items-center justify-center">
+        Loading audit...
+      </div>
+    );
+  }
 
-  {/* HEADER */}
-  <h1 className="text-6xl text-black font-extrabold tracking-tight mb-8">
-    AI Spend Audit Report
-  </h1>
+  return (
+    <main className="min-h-screen bg-black text-white p-8">
+      <div className="max-w-5xl mx-auto">
 
-            {/* SAVINGS CARD */}
-            <div className="mb-8 bg-green-900/20 border border-green-500 p-6 rounded-xl">
-                <h2 className="text-xl font-bold text-green-400">
-                    Total Savings
-                </h2>
-                <p className="text-3xl font-bold">
-                    ${audit.total_savings}/month
+        {/* HERO */}
+        <div className="mb-10">
+          <h1 className="text-6xl font-extrabold mb-4">
+            AI Spend Audit Report
+          </h1>
+
+          <p className="text-gray-400 text-lg">
+            Optimized AI subscription analysis report
+          </p>
+        </div>
+
+        {/* SAVINGS CARD */}
+        <div className="bg-gradient-to-r from-green-500 to-emerald-600 text-black p-8 rounded-3xl mb-10 shadow-2xl">
+          <h2 className="text-2xl font-bold mb-2">
+            Potential Savings
+          </h2>
+
+          <p className="text-6xl font-extrabold">
+            ${audit.total_savings}/month
+          </p>
+
+          <p className="text-2xl mt-4">
+            ${audit.total_savings * 12}/year
+          </p>
+        </div>
+
+        {/* SUMMARY */}
+        <div className="bg-gray-900 border border-gray-800 rounded-3xl p-8 mb-10">
+          <h2 className="text-3xl font-bold mb-4">
+            AI Summary
+          </h2>
+
+          <p className="text-gray-300 text-lg leading-8">
+            {audit.summary}
+          </p>
+        </div>
+
+        {/* TOOLS */}
+        <div>
+          <h2 className="text-3xl font-bold mb-6">
+            Tools Breakdown
+          </h2>
+
+          <div className="space-y-5">
+            {audit.tools?.map((tool: any, index: number) => (
+              <div
+                key={index}
+                className="bg-gray-900 border border-gray-800 p-6 rounded-2xl"
+              >
+                <div className="flex justify-between mb-4">
+                  <h3 className="text-2xl font-bold">
+                    {tool.name}
+                  </h3>
+
+                  <span className="bg-gray-800 px-4 py-2 rounded-xl text-sm">
+                    {tool.plan}
+                  </span>
+                </div>
+
+                <p className="text-gray-300 mb-2">
+                  Monthly Cost: ${tool.cost}
                 </p>
-            </div>
 
-            {/* SUMMARY SECTION */}
-            <div className="mb-8 bg-gray-900 border border-gray-700 p-6 rounded-xl">
-                <h2 className="text-2xl font-bold mb-2">
-                    Audit Summary
-                </h2>
+                <p className="text-gray-300 mb-2">
+                  Team Size: {tool.teamSize}
+                </p>
+
                 <p className="text-gray-300">
-                    {audit.summary || "No summary available"}
+                  Use Case: {tool.useCase}
                 </p>
-            </div>
+              </div>
+            ))}
+          </div>
+        </div>
 
-            {/* TOOLS SECTION */}
-            <h2 className="text-2xl font-bold mb-4">
-                Tools Breakdown
-            </h2>
+        {/* BUTTONS */}
+        <div className="flex gap-4 mt-10">
 
-            <div className="space-y-4">
-                {audit.tools?.map((tool: any, index: number) => (
-                    <div
-                        key={index}
-                        className="bg-gray-900 border border-gray-700 p-4 rounded-xl"
-                    >
-                        <p><b>Tool:</b> {tool.name}</p>
-                        <p><b>Plan:</b> {tool.plan}</p>
-                        <p><b>Cost:</b> ${tool.cost}/month</p>
-                        <p><b>Team Size:</b> {tool.teamSize}</p>
-                        <p><b>Use Case:</b> {tool.useCase}</p>
-                    </div>
-                ))}
-            </div>
+          <button
+            onClick={downloadPDF}
+            className="cursor-pointer bg-green-500 hover:bg-green-400 transition-all text-black px-6 py-3 rounded-2xl font-bold"
+          >
+            Download PDF
+          </button>
+
+          <button
+            onClick={sendEmail}
+            disabled={sending}
+            className="cursor-pointer bg-blue-500 hover:bg-blue-400 transition-all px-6 py-3 rounded-2xl font-bold"
+          >
+            {sending ? "Sending..." : "Send Email"}
+          </button>
 
         </div>
-    );
+      </div>
+    </main>
+  );
 }

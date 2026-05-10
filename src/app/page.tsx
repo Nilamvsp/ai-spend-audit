@@ -5,6 +5,7 @@ import { runAuditEngine } from "../lib/auditEngine";
 import { useEffect, useState } from "react";
 import { supabase } from "../lib/supabaseClient";
 import { v4 as uuidv4 } from "uuid";
+import { buildAuditHTML } from "@/src/lib/reportTemplate";
 
 
 
@@ -87,15 +88,19 @@ export default function () {
 
   const saveLead = async () => {
 
-    const { data, error } = await supabase.from("leads").insert([
-      {
-        email,
-        company,
-        role,
-        tools: tools,
-        total_savings: results.reduce((sum, r) => sum + r.savings, 0),
-      },
-    ]);
+    const { data, error } = await supabase
+      .from("audits")
+      .insert([
+        {
+          id: crypto.randomUUID(),
+          tools,
+          results,
+          summary: summary || "AI usage optimized audit",
+          total_savings: totalSavings || 0,
+        },
+      ])
+      .select()
+      .single();
 
     if (error) {
       console.error("Insert error:", error.message);
@@ -156,37 +161,50 @@ export default function () {
     0
   );
 
+  
+
   const generateShareableAudit = async () => {
+    const { data, error } = await supabase
+      .from("audits")
+      .insert([
+        {
+          id: crypto.randomUUID(),
+          tools,
+          results,
+          summary,
+          total_savings: totalSavings,
+        },
+      ])
+      .select()
+      .single();
 
-  const auditId = uuidv4(); // ✅ ONE SOURCE OF TRUTH
+    if (error) {
+      alert("Failed to create link");
+      console.error(error);
+      return;
+    }
 
-  const totalSavings = results.reduce(
-    (sum, r) => sum + r.savings,
-    0
-  );
+    const url = `${window.location.origin}/audit/${data.id}`;
 
-  const { error } = await supabase.from("audits").insert([
-    {
-      id: auditId,   // ✅ same ID used everywhere
-      tools,
-      results,
-      summary,
-      total_savings: totalSavings,
-    },
-  ]);
+    await navigator.clipboard.writeText(url);
 
+    alert("Link copied to clipboard!");
+  };
 
-  if (error) {
-    alert("Failed to create share link");
-    console.error(error);
-    return;
-  }
+  const downloadPDF = async () => {
+  const res = await fetch("/api/pdf", {
+    method: "POST",
+    body: JSON.stringify(audit),
+  });
 
-  const shareUrl = `${window.location.origin}/audit/${auditId}`;
+  const blob = await res.blob();
 
-  alert("Shareable link created!");
+  const url = window.URL.createObjectURL(blob);
 
-  console.log("Share URL:", shareUrl);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "audit-report.pdf";
+  a.click();
 };
 
   return (
@@ -468,9 +486,11 @@ export default function () {
         ))}
       </div>
 
+
+
       <button
         onClick={generateShareableAudit}
-        className="w-full mt-4 bg-blue-500 text-white py-3 rounded-xl font-semibold hover:bg-blue-400"
+        className="cursor-pointer bg-blue-500 px-4 py-2 rounded mt-4"
       >
         Generate Shareable Link
       </button>
@@ -479,3 +499,4 @@ export default function () {
     </main>
   );
 }
+
