@@ -17,15 +17,14 @@ https://ai-spend-audit-sigma-blush.vercel.app
 # Screenshots
 
 ## Homepage
-![alt text](image-1.png)
+![alt text](image-2.png)
 
 ## Audit Results
 
-(Add screenshot here)
+![alt text](image-3.png)
 
 ## Shareable Report Page
-
-(Add screenshot here)
+![alt text](image-4.png)
 
 ---
 
