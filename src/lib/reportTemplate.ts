@@ -1,4 +1,13 @@
-export const buildAuditHTML = (audit: any) => {
+export const buildAuditHTML = (audit: {
+  summary?: string;
+  total_savings?: number;
+  tools?: {
+    name: string;
+    plan: string;
+    cost: string;
+    useCase?: string;
+  }[];
+}) => {
   const tools = audit?.tools || [];
 
   return `
@@ -36,7 +45,12 @@ export const buildAuditHTML = (audit: any) => {
 
         ${tools
           .map(
-            (tool: any) => `
+           (tool: {
+  name: string;
+  plan: string;
+  cost: string;
+  useCase?: string;
+}) => `
           <tr>
             <td style="padding:12px;border-bottom:1px solid #ddd;">
               ${tool.name}

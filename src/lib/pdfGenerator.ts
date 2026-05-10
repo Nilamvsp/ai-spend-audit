@@ -1,7 +1,16 @@
 import puppeteer from "puppeteer";
 import { buildAuditHTML } from "./reportTemplate";
 
-export const generatePDF = async (audit: any) => {
+export const generatePDF = async (audit: {
+  summary?: string;
+  total_savings?: number;
+  tools?: {
+    name: string;
+    plan: string;
+    cost: string;
+    useCase?: string;
+  }[];
+}) => {
   const browser = await puppeteer.launch({
     headless: true,
   });

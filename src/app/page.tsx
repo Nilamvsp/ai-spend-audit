@@ -5,8 +5,6 @@ import { runAuditEngine } from "../lib/auditEngine";
 import { useEffect, useState } from "react";
 import { supabase } from "../lib/supabaseClient";
 import { v4 as uuidv4 } from "uuid";
-import { buildAuditHTML } from "@/src/lib/reportTemplate";
-
 
 
 type Tool = {
@@ -33,7 +31,7 @@ const toolPlans: Record<string, string[]> = {
 };
 
 
-export default function () {
+export default function HomePage() {
   const [tools, setTools] = useState<Tool[]>([]);
   const [results, setResults] = useState<AuditResult[]>([]);
   const [summary, setSummary] = useState("");
@@ -191,21 +189,6 @@ export default function () {
     alert("Link copied to clipboard!");
   };
 
-  const downloadPDF = async () => {
-  const res = await fetch("/api/pdf", {
-    method: "POST",
-    body: JSON.stringify(audit),
-  });
-
-  const blob = await res.blob();
-
-  const url = window.URL.createObjectURL(blob);
-
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = "audit-report.pdf";
-  a.click();
-};
 
   return (
     <main className="min-h-screen bg-black text-white p-6 flex flex-col items-center">
