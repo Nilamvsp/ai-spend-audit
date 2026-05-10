@@ -130,7 +130,7 @@ const [audit, setAudit] = useState<Audit | null>(null);
           </p>
 
           <p className="text-2xl mt-4">
-            ${audit.total_savings * 12}/year
+           ${(audit.total_savings ?? 0) * 12}/year
           </p>
         </div>
 
