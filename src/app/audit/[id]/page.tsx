@@ -8,7 +8,22 @@ export default function Page() {
   const params = useParams();
   const id = params?.id as string;
 
-  const [audit, setAudit] = useState<any>(null);
+ type Audit = {
+  summary?: string;
+  total_savings?: number;
+  tools?: {
+    name: string;
+    plan: string;
+    cost: string;
+    teamSize?: string;
+    useCase?: string;
+  }[];
+};
+
+
+
+
+const [audit, setAudit] = useState<Audit | null>(null);
   const [sending, setSending] = useState(false);
 
   useEffect(() => {
@@ -137,7 +152,16 @@ export default function Page() {
           </h2>
 
           <div className="space-y-5">
-            {audit.tools?.map((tool: any, index: number) => (
+            {audit.tools?.map((
+  tool: {
+    name: string;
+    plan: string;
+    cost: string;
+    teamSize?: string;
+    useCase?: string;
+  },
+  index: number
+) => (
               <div
                 key={index}
                 className="bg-gray-900 border border-gray-800 p-6 rounded-2xl"

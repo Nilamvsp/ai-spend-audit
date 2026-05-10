@@ -4,8 +4,6 @@ import { runAuditEngine } from "../lib/auditEngine";
 
 import { useEffect, useState } from "react";
 import { supabase } from "../lib/supabaseClient";
-import { v4 as uuidv4 } from "uuid";
-
 
 type Tool = {
   name: string;
