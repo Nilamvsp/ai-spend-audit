@@ -17,6 +17,8 @@ type AuditResult = {
   tool: string;
   recommendation: string;
   savings: number;
+  annualSavings: number;
+  currentPlan?: string;
   reason: string;
 };
 
