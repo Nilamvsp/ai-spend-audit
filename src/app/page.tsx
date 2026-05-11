@@ -160,34 +160,42 @@ export default function HomePage() {
   );
 
 
+const generateShareableAudit = async () => {
+if (results.length === 0) {
+alert("Please run the audit first.");
+return;
+}
 
-  const generateShareableAudit = async () => {
-    const { data, error } = await supabase
-      .from("audits")
-      .insert([
-        {
-          id: crypto.randomUUID(),
-          tools,
-          results,
-          summary,
-          total_savings: totalSavings,
-        },
-      ])
-      .select()
-      .single();
+const auditData = {
+id: crypto.randomUUID(),
+tools,
+results,
+summary:
+summary ||
+"Your AI stack has been analyzed for possible savings opportunities.",
+total_savings: totalSavings || 0,
+};
 
-    if (error) {
-      alert("Failed to create link");
-      console.error(error);
-      return;
-    }
+const { data, error } = await supabase
+.from("audits")
+.insert([auditData])
+.select()
+.single();
 
-    const url = `${window.location.origin}/audit/${data.id}`;
+if (error) {
+console.error(error);
+alert("Failed to generate shareable link");
+return;
+}
 
-    await navigator.clipboard.writeText(url);
+const url = `${window.location.origin}/audit/${data.id}`;
 
-    alert("Link copied to clipboard!");
-  };
+await navigator.clipboard.writeText(url);
+
+alert("Shareable link copied!");
+};
+
+ 
 
 
   return (
